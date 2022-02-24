@@ -12,21 +12,64 @@ function main(){
 
     //add text to the canvas for the title
     svg.append("text")
-        .attr("transform","translate(100,0")
+        .attr("transform","translate(100,0)")
         .attr("x",50)
         .attr("y",50)
         .attr("font-size","20px")
         .attr("font-family","sans-serif")
         .text("Bubble Chart for Car Dimension and Car HorsePower/Torque")
 
+
+    let xScale = d3.scaleLinear().range([0,width]);
+    let yScale = d3.scaleLinear().range([height,0]);
+    let sizeScale = d3.scaleLinear().range([2,10]);
+
+
     const container_g = svg.append("g")
         .attr("transform",
             "translate(100,100)");
-    let xScale = d3.scaleLinear().range([0,width]);
-    let yScale = d3.scaleLinear().range([height,0]);
-    let sizeScale = d3.scaleLinear().range([])
 
-    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/7847dd9d3ffa34e24dc5144fae74185bcc55f372/cars.csv").then(data=>{
+    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/1ed78960d1bd85cec3d7894dc8f87c05617b8c5c/cars.csv").then(data=>{
+        xScale.domain([0,30]);
+        yScale.domain([0,40]);
+        let colorScale = d3.scaleLinear().domain([100,d3.max(data,function(d){
+            return d.Horsepower;
+        })]) .range(["white","blue"]);
+
+
+        sizeScale.domain([100,800]);
+
+        container_g.selectAll(".dot")
+            .data(data)
+            .enter().append("circle")
+            .attr("class","dot")
+            .attr("cx",function(d){ return xScale(d.City_MPG); })
+            .attr("cy",function(d){ return yScale(d.Highway_MPG);})
+            .attr("r",function(d){ return sizeScale(d.Torque);})
+            .attr("fill",function(d){ return colorScale(d.Horsepower)})
+
+        container_g.append("g")
+            .attr("transform", "translate(0, " + height + ")")
+            .call(d3.axisBottom(xScale))
+            .append("text")
+            .attr("y", height-450)
+            .attr("x",width-250)
+            .attr("font-size","30px")
+            .attr("stroke", "black")
+            .attr("font-family","sans-serif")
+            .text("Miles Per Gallon In The City");
+
+        container_g.append("g")
+            .call(d3.axisLeft(yScale).ticks(15))
+            .append("text")
+            .attr("font-size","25px")
+            .attr("transform","rotate(-90)")
+            .attr("y",40)
+            .attr("x",-100)
+            .attr("dy","-4.1em")
+            .attr("stroke","black")
+            .text("Miles per Gallon In The Highway");
+
 
     })
 }
