@@ -22,15 +22,15 @@ function main(){
 
     let xScale = d3.scaleLinear().range([0,width]);
     let yScale = d3.scaleLinear().range([height,0]);
-    let sizeScale = d3.scaleLinear().range([2,10]);
+    let sizeScale = d3.scaleLinear().range([2,20]);
 
 
     const container_g = svg.append("g")
         .attr("transform",
             "translate(100,100)");
 
-    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/1ed78960d1bd85cec3d7894dc8f87c05617b8c5c/cars.csv").then(data=>{
-        xScale.domain([0,30]);
+    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/00edc0d802df72c51b35b5c3101b16ac28460ee8/cars.csv").then(data=>{
+        xScale.domain([0,40]);
         yScale.domain([0,40]);
         let colorScale = d3.scaleLinear().domain([100,d3.max(data,function(d){
             return d.Horsepower;
