@@ -16,21 +16,41 @@ function main(){
         .attr("y", 50)
         .attr("font-size","20px")
         .attr("font-family","sans-serif")
-        .text("LineChart for years of car model and fuel efficiency in highways");
+        .text("LineChart for years for fuel efficiency by year release");
 
-    const xScale = d3.scaleLinear().range([0,width]);
+
     const yScale = d3.scaleLinear().range([height,0]);
 
     const container_g = svg.append("g")
         .attr("transform","translate(100,100)");
 
-    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/00edc0d802df72c51b35b5c3101b16ac28460ee8/cars.csv").then(data=>{
-        xScale.domain([d3.min(data,function(d){ return d.Year}),d3.max(data,function(d){ return d.Year})]);
-        yScale.domain([0,60])
+    d3.csv("https://gist.githubusercontent.com/tlin41390/6733ca28a6f864be20d7bcfb4028d325/raw/9564327eb2892a01c335ee7e993b1c1ef607a3de/broadway_saigon.csv", function(d){ return {date:d3.timeParse("%m/%d/%y")(d.Date), value:d.Gross}}).then(data=>{
+        const xScale = d3.scaleTime()
+            .domain(d3.extent(data, function(d) { return d.date}))
+            .range([0,width]);
 
-        container_g.selctAll("line")
-            .data(data)
-            .enter().append("path")
+        console.log(data);
+        console.log(d3.extent(data,d=>d.date));
+
+        yScale.domain([0,d3.max(data, d=>d.value)])
+
+        container_g.append("g")
+            .attr("transform","translate(0," + height + ")")
+            .call(d3.axisBottom(xScale).ticks(d3.timeYear));
+
+
+        container_g.append("g")
+            .call(d3.axisLeft(yScale))
+
+        container_g.append("path")
+            .datum(data)
+            .attr("fill","none")
+            .attr("stroke","blue")
+            .attr("stroke-width",1.5)
+            .attr("d",d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.value)));
 
     })
 }
+main();

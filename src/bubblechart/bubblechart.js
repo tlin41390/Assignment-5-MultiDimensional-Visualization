@@ -22,31 +22,36 @@ function main(){
 
     let xScale = d3.scaleLinear().range([0,width]);
     let yScale = d3.scaleLinear().range([height,0]);
-    let sizeScale = d3.scaleLinear().range([2,20]);
+    let sizeScale = d3.scaleLinear().range([2,10]);
 
 
     const container_g = svg.append("g")
         .attr("transform",
             "translate(100,100)");
 
-    d3.csv("https://gist.githubusercontent.com/tlin41390/b7cb4fb2dd543b138a06bbcbd4ea5d17/raw/00edc0d802df72c51b35b5c3101b16ac28460ee8/cars.csv").then(data=>{
-        xScale.domain([0,40]);
-        yScale.domain([0,40]);
-        let colorScale = d3.scaleLinear().domain([100,d3.max(data,function(d){
-            return d.Horsepower;
-        })]) .range(["white","blue"]);
+    d3.csv("https://gist.githubusercontent.com/tlin41390/e7aebdfef38808e0d362143ce7a8b8ce/raw/98256dbdd4b8b1e91a2c94ec5b4b61f5144ca159/broadway.csv").then(data=>{
+        xScale.domain([1500,15000]);
+        yScale.domain([0,100]);
 
 
-        sizeScale.domain([100,800]);
+        sizeScale.domain([40000,900000]);
 
         container_g.selectAll(".dot")
             .data(data)
             .enter().append("circle")
             .attr("class","dot")
-            .attr("cx",function(d){ return xScale(d.City_MPG); })
-            .attr("cy",function(d){ return yScale(d.Highway_MPG);})
-            .attr("r",function(d){ return sizeScale(d.Torque);})
-            .attr("fill",function(d){ return colorScale(d.Horsepower)})
+            .attr("cx",function(d){ return xScale(d.Attendance); })
+            .attr("cy",function(d){ return yScale(d.Capacity);})
+            .attr("r",function(d){ return sizeScale(d.Gross);})
+            .attr("fill",function(d){
+                if(d.Type == "Play"){
+                    return "dodgerblue"
+                }else if(d.Type =="Musical"){
+                    return "limegreen";
+                }else{
+                    return "crimson";
+                }
+            })
 
         container_g.append("g")
             .attr("transform", "translate(0, " + height + ")")
@@ -57,7 +62,7 @@ function main(){
             .attr("font-size","30px")
             .attr("stroke", "black")
             .attr("font-family","sans-serif")
-            .text("Miles Per Gallon In The City");
+            .text("Total Attendance of That show");
 
         container_g.append("g")
             .call(d3.axisLeft(yScale).ticks(15))
@@ -68,7 +73,7 @@ function main(){
             .attr("x",-100)
             .attr("dy","-4.1em")
             .attr("stroke","black")
-            .text("Miles per Gallon In The Highway");
+            .text("Percentage of Theatre that was filled");
 
 
     })
