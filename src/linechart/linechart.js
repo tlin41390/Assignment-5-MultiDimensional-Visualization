@@ -1,4 +1,8 @@
 function main(){
+    //credits to
+    /* Alark Joshi's Skeletion Code
+    /* https://www.d3-graph-gallery.com/graph/line_basic.html
+    */
     const canvasWidth = 700;
     const canvasHeight = 700;
     const margin = 200;
@@ -56,8 +60,6 @@ function main(){
             .attr("stroke","black")
             .text("Earnings for the Show");
 
-
-
         //create the line for the visual
         container_g.append("path")
             .datum(data)
@@ -66,6 +68,7 @@ function main(){
             .attr("stroke-width",1.5)
             //use the built in d3 line function to create the line for the visual
             .attr("d",d3.line()
+                //chart the x and y axis based on variables.
                 .x(d => xScale(d.date))
                 .y(d => yScale(d.value)));
 
