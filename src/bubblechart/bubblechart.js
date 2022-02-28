@@ -1,4 +1,8 @@
 function main(){
+    //credits to
+    /* Alark Joshi's Skeleton Code
+    * https://www.d3-graph-gallery.com/graph/bubble_basic.html
+    */
     const canvasWidth = 700;
     const canvasHeight = 700;
     const margin = 200;
@@ -20,6 +24,7 @@ function main(){
         .text("Bubble Chart for Car Dimension and Car HorsePower/Torque")
 
 
+    //create the scales for the x y and size.
     let xScale = d3.scaleLinear().range([0,width]);
     let yScale = d3.scaleLinear().range([height,0]);
     let sizeScale = d3.scaleLinear().range([2,10]);
@@ -30,12 +35,13 @@ function main(){
             "translate(100,100)");
 
     d3.csv("https://gist.githubusercontent.com/tlin41390/e7aebdfef38808e0d362143ce7a8b8ce/raw/98256dbdd4b8b1e91a2c94ec5b4b61f5144ca159/broadway.csv").then(data=>{
+        //set the domain
         xScale.domain([1500,15000]);
         yScale.domain([0,100]);
 
-
         sizeScale.domain([40000,900000]);
 
+        //append the bubbles to the chart
         container_g.selectAll(".dot")
             .data(data)
             .enter().append("circle")
@@ -43,6 +49,7 @@ function main(){
             .attr("cx",function(d){ return xScale(d.Attendance); })
             .attr("cy",function(d){ return yScale(d.Capacity);})
             .attr("r",function(d){ return sizeScale(d.Gross);})
+            //set the categorical variables for the color.
             .attr("fill",function(d){
                 if(d.Type == "Play"){
                     return "dodgerblue"
@@ -52,7 +59,7 @@ function main(){
                     return "crimson";
                 }
             })
-
+        //append the x axis
         container_g.append("g")
             .attr("transform", "translate(0, " + height + ")")
             .call(d3.axisBottom(xScale))
@@ -64,6 +71,7 @@ function main(){
             .attr("font-family","sans-serif")
             .text("Total Attendance of That show");
 
+        //append the y axis
         container_g.append("g")
             .call(d3.axisLeft(yScale).ticks(15))
             .append("text")
