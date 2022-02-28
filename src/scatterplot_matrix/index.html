@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        svg {
+            font: 10px sans-serif;
+            padding: 10px;
+        }
+
+        .axis,
+        .frame {
+            shape-rendering: crispEdges;
+        }
+
+        .axis line {
+            stroke: #ddd;
+        }
+
+        .axis path {
+            display: none;
+        }
+
+        .cell text {
+            font-weight: bold;
+            text-transform: capitalize;
+            fill: black;
+        }
+
+        .frame {
+            fill: none;
+            stroke: black;
+        }
+
+        circle {
+            fill-opacity: .7;
+        }
+
+        circle.hidden {
+            fill: #ccc !important;
+        }
+
+        .extent {
+            fill: #000;
+            fill-opacity: .125;
+            stroke: #fff;
+        }
+    </style>
+    <title>D3 ScatterPlot Matrix</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<script src = "scatterplot_matrix.js"></script>
+</body>
+</html>
