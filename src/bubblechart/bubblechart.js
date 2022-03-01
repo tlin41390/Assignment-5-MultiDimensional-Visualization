@@ -21,7 +21,7 @@ function main() {
         .attr("y", 50)
         .attr("font-size", "20px")
         .attr("font-family", "sans-serif")
-        .text("Bubble Chart for Different Plays and their popularity based on Sales, Theatres Filled, and Attendance")
+        .text("Bubble Chart for Popularity of Plays")
 
 
     //create the scales for the x y and size.
@@ -39,6 +39,9 @@ function main() {
         yScale.domain([0, 100]);
 
         sizeScale.domain([40000, 900000]);
+        const color = d3.scaleOrdinal()
+            .range(["dodgerblue","limegreen","crimson"])
+
 
         //append the bubbles to the chart
         container_g.selectAll(".dot")
@@ -55,15 +58,7 @@ function main() {
                 return sizeScale(d.Gross);
             })
             //set the categorical variables for the color.
-            .attr("fill", function (d) {
-                if (d.Type == "Play") {
-                    return "dodgerblue"
-                } else if (d.Type == "Musical") {
-                    return "limegreen";
-                } else {
-                    return "crimson";
-                }
-            })
+            .attr("fill",function(d) {return color(d.Type)})
             .on("mouseover", function (Event, d) {
                 d3.select(this)
                     .attr("stroke", "black")
@@ -99,6 +94,34 @@ function main() {
             .attr("dy", "-4.1em")
             .attr("stroke", "black")
             .text("Percentage of Theatre that was filled");
+
+        container_g.append("g")
+            .attr("class", "legendOrdinal")
+            .attr("transform", "translate(400,200)")
+            .attr("font-family","sans-serif");
+
+        container_g.append("g")
+            .attr("class","legendSize")
+            .attr("font-family","sans-serif")
+            .attr("transform","translate(400,300)");
+
+        //set the color and size legend for the bubble chart
+        const legendOrdinal = d3.legendColor()
+            .scale(color);
+
+        const sizeOrdinal = d3.legendSize()
+            .scale(sizeScale)
+            .shape('circle')
+            .shapePadding(5)
+            .labelOffset(10)
+            .orient('vertical');
+
+
+        container_g.select(".legendOrdinal")
+            .call(legendOrdinal);
+
+        container_g.select(".legendSize")
+            .call(sizeOrdinal);
 
 
     })
