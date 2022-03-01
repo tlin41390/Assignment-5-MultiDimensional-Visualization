@@ -36,6 +36,9 @@ function main(){
 
     d3.csv("https://gist.githubusercontent.com/tlin41390/e7aebdfef38808e0d362143ce7a8b8ce/raw/98256dbdd4b8b1e91a2c94ec5b4b61f5144ca159/broadway.csv").then(data=>{
         //set the domain
+        // container_g.append("text")
+        //     .attr("id", "tooltip")
+        //     // .attr("x")
         xScale.domain([1500,15000]);
         yScale.domain([0,100]);
 
@@ -59,6 +62,27 @@ function main(){
                     return "crimson";
                 }
             })
+            .on("mouseover",function(d){
+                let xPosition = parseFloat(d3.select(this).attr("cx"));
+                let yPosition = parseFloat(d3.select(this).attr("cy"));
+                d3.select(this)
+                    .attr("stroke","black")
+                    .append("text")
+                    .attr("id","tooltip")
+                    .attr("x",xPosition)
+                    .attr("y",yPosition)
+                    .attr("text-anchor","middle").attr("font-family", "sans-serif")
+                    .attr("font-size", "11px")
+                    .attr("font-weight", "bold")
+                    .attr("fill", "black")
+                    .text(d);
+            })
+            .on("mouseout",function(){
+                d3.select(this)
+                    .attr("stroke","none");
+                d3.select("#tooltip").remove();
+            })
+
         //append the x axis
         container_g.append("g")
             .attr("transform", "translate(0, " + height + ")")
